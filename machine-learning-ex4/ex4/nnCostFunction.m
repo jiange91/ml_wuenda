@@ -61,55 +61,38 @@ Theta2_grad = zeros(size(Theta2));
 %               the regularization separately and then add them to Theta1_grad
 %               and Theta2_grad from Part 2.
 %
-X=[ones(m,1),X];
-a1=Theta1*X';
-z1=[ones(m,1),sigmoid(a1)'];
-a2=Theta2*z1';
-h=sigmoid(a2);
 
-yk=zeros(m,num_labels);
-for i=1:m
-	yk(i,y(i))=1;
-end
+% add ones to every input X
+Xone = [ones(m,1) X];
 
-J = (1/m)* sum(sum(((-yk) .* log(h') - (1 - yk) .* log(1 - h'))));
+% obtain the activation for hidden layer
+z2 = Theta1 * Xone';
+a2 = sigmoid(z2);
+a2one = [ones(1,size(a2,2));a2];
+z3 = Theta2 * a2one;
+a3 = sigmoid(z3);
 
-r=(lambda/2/m)*(sum(sum(Theta1(:,2:end) .^ 2))+sum(sum(Theta2(:,2:end) .^ 2)));
-J=J+r;
+% convert y to vectors
+y_vec = zeros(m, num_labels);
+for i = 1:m
+	y_vec(i,y(i)) = 1;
 
-
-for ex=1:m
-	a1=X(ex,:);
-	a1=a1';
-	z2=Theta1*a1;
-	a2=[1;sigmoid(z2)];
-	z3=Theta2*a2;
-	a3=sigmoid(z3);
-	y=yk(ex,:);
-	delta3=a3-y';
-	delta2 = Theta2(:,2:end)' * delta3 .* sigmoidGradient(z2);  % delta2 is a 25x1 column vector
-    Theta1_grad = Theta1_grad + delta2 * a1';
-    Theta2_grad = Theta2_grad + delta3 * a2';
-end
-
-Theta1_grad=Theta1_grad ./ m;
-Theta2_grad=Theta2_grad ./ m;
-
-Theta1(:,1) = 0;
-Theta2(:,1) = 0;
-Theta1_grad = Theta1_grad + lambda / m * Theta1;
-Theta2_grad = Theta2_grad + lambda / m * Theta2;
-
-
-
-
-
-
-
-
-% -------------------------------------------------------------
+%compute regularized cost
+J = (1/m) * sum(sum((-y_vec .* log(a3') - (1-y_vec) .* log(1-a3'))));
+r = (lambda/(2*m)) * (sum(sum(Theta1(:,2:end) .^ 2)) + sum(sum(Theta2(:,2:end) .^ 2)));
+J = J + r;
 
 % =========================================================================
+
+%compute error for output layer
+error3 = a3 - y_vec';
+
+%compute error for hidden layer L2
+error2 = (Theta2' * error3)(2:end,:) .* sigmoidGradient(z2);
+
+%obtain delta1,2
+Theta1_grad = 1/m * (error2 * [ones(m,1) X]) + lambda/m * [zeros(size(Theta1,1),1) Theta1(:, 2:end)];
+Theta2_grad = 1/m * (error3 * [ones(m,1) a2']) + lambda/m * [zeros(size(Theta2,1),1) Theta2(:, 2:end)];
 
 % Unroll gradients
 grad = [Theta1_grad(:) ; Theta2_grad(:)];
