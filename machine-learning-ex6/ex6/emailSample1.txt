@@ -1,10 +1,14 @@
 > Anyone knows how much it costs to host a web portal ?
 >
-Well, it depends on how many visitors you're expecting.
-This can be anywhere from less than 10 bucks a month to a couple of $100. 
-You should checkout http://www.rackspace.com/ or perhaps Amazon EC2 
-if youre running something big..
-
+Dear all,
+ 
+LRLR would like to wish all of you a happy winter holiday and Chinese Spring Festival.
+ 
+Please remember all your library loans can be renewed online via NUsearch. The due date of the borrowed/renewed items can be extended to 22 Feb 2019 or after.
+ 
+Many online resources and services can be accessed 24/7/365. Just make sure you use the correct login method.
+ 
+Please find below for the library opening hours over the winter holiday of Academic Year 2018-19.
 To unsubscribe yourself from this mailing list, send an email to:
 groupname-unsubscribe@egroups.com
 
